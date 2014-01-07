@@ -8,6 +8,8 @@ import net.sf.jasperreports.engine.query.JRAbstractQueryExecuter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +32,13 @@ public class CustomJRQueryExecuter extends JRAbstractQueryExecuter {
     public JRDataSource createDatasource() throws JRException {
         ArrayList collection = new ArrayList();
         Map person1= new HashMap();
-        person1.put("name", getValueParameter("PAR1").getValue().toString());
+		JSONObject json = null;
+		try{
+	      json = (JSONObject)new JSONParser().parse(getValueParameter("PAR1").getValue().toString());
+	    }catch(Exception e){
+		  throw new RuntimeException(e);
+	    }
+        person1.put("name", json.get("name"));
         Map person2= new HashMap();
         person2.put("name", "felipao");
         collection.add(person1);
